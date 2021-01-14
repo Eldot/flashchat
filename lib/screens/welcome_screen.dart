@@ -8,15 +8,34 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
   AnimationController controller;
 
   @override
   void initState() {
     super.initState();
-    // controller = AnimationController(
-    //   duration: Duration(seconds: 1),
-    // );
+    controller = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
+
+    // Increment the value from 0.0 to 1.0 'forward' in seconds: 1
+    controller.forward();
+
+    // Add a listener to do something every time the controller ticks
+    controller.addListener(() {
+      setState(() {});
+      print(controller.value);
+    });
+
+    /* Possible uses for this changing value:-
+       1) backgroundColor: Colors.red.withOpacity(controller.value),
+          (Remember to add an empty setState inside the .addListener)
+       2) Text('${controller.value.toInt()}%', ... ),
+       3) Height of image as with height: controller.value,
+          to adjust the height from 0 to 100 pixels in 1 second
+     */
   }
 
   @override
