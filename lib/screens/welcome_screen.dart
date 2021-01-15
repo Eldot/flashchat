@@ -11,6 +11,7 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
+  Animation animation;
 
   @override
   void initState() {
@@ -20,13 +21,16 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       vsync: this,
     );
 
+    animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
+        .animate(controller);
+
     // Increment the value from 0.0 to 1.0 'forward' in seconds: 1
     controller.forward();
 
     // Add a listener to do something every time the controller ticks
     controller.addListener(() {
       setState(() {});
-      print(controller.value);
+      print(animation.value);
     });
 
     /* Possible uses for this changing value:-
@@ -39,9 +43,15 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 
   @override
+  void dispose() {
+    controller.dispose(); // Remember to stop the animation on page-destroy
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: animation.value, // Colors.white,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
